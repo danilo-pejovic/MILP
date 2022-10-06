@@ -1,0 +1,29 @@
+Python file main.py can be either called from cli (python3.9, without any added libraries) or via IDE like pycharm. Script will ask for name of file it will create, number of nodes and maximum allocated memory/ time. After that you open the file and (unless you want to add more dependencies before that) you simply run the file.
+Then it will create process like one in figure 5. (with appropriate amount of nodes) in report with given informations (it will fill rest of the needed informations with random integers).
+You can add dependencies by writting following as lp_solve seems to be ignoring simpler initialization of binary variables:
+
+m - 1000*bi_j<=0
+
+which makes variable bi_j be seen as one meaning process i is happening before process j. For example to get graph in figure 4 in repor, you would need to add following to what python script generated:
+
+m-1000 b2_4<=0;
+m-1000 b2_5<=0;
+m-1000 b2_6<=0;
+m-1000 b2_7<=0;
+
+
+m-1000 b5_6<=0;
+m-1000 b5_7<=0;
+
+
+m-1000 b4_6<=0;
+
+
+m-1000 b3_8<=0;
+m-1000 b3_9<=0;
+
+
+Which we can see is simply is writing what sub-processes are dependent on what process. As a redundancy I would write relations even if there is a step or 2 inbetween (like process 2 and 7, where there is process 5 inbetween), but nothing should change if that relation is dropped. 
+
+
+In file lp_solve_possible_bug is instance where lp solve is simply ignoring explicit declaration of value of binary variable - I am sending it in case it is acting differently on different machines. Varable b1_2 should not be 0.
